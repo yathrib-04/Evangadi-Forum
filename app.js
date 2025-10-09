@@ -1,27 +1,29 @@
+
 const express = require("express");
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
+
 const userRoutes = require("./routes/userRoutes");
+const dbconnection = require("./DB/dbConfig");
 
+// Middleware to parse JSON
+app.use(express.json());
 
-// user routes middleware
+// User routes
 app.use("/api/users", userRoutes);
 
-// register routes middleware
-app.use("/api/users", userRoutes);
-
-// login routes middleware
-app.use("/api/users", userRoutes);
-
-
-app.get("/", (req, res) => {
-  res.send("Hello from express!");
-});
-
-app.listen(port, (err) => {
-  if (err) {
-    console.log(err.message);
-  } else {
-    console.log(`listening on port ${port}`);
+// Async function to test DB connection
+async function testDB() {
+  try {
+    const result = await dbconnection.execute("SELECT 'test' AS test_col");
+    await app.listen(port);
+    console.log("Database connected successfully.");
+    console.log('listening on port', port);
+  } catch (error) {
+    console.error( error.message);
   }
-});
+}
+
+// Call DB test function
+testDB();
+
