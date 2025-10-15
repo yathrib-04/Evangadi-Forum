@@ -54,7 +54,6 @@ async function login(req, res) {
         const token = jwt.sign({ userid, username }, process.env.JWT_SECRET, { expiresIn: "1h" });
         return res.status(StatusCodes.OK).json({ message: "User logged in successfully", token });
 
-
     } catch (error) {
         console.log(error.message);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "something went wrong please try again" });
@@ -67,4 +66,25 @@ async function check(req, res) {
     res.status(StatusCodes.OK).json({ message: "valid user ", username, userid });
 }
 
-module.exports = { register, login, check };
+
+
+
+    // delete user function
+    async function deleteUser(req, res) {
+    const { userid } = req.params; // get the user ID from URL
+
+    try {
+        const [user] = await dbconnection.query("SELECT * FROM users WHERE userid = ?", [userid]);
+        if (user.length === 0) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+        }
+
+        await dbconnection.query("DELETE FROM users WHERE userid = ?", [userid]);
+        return res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong" });
+    }
+}
+
+module.exports = { register, login, check, deleteUser };
