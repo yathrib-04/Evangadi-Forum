@@ -51,7 +51,7 @@ async function login(req, res) {
        
         const username = user[0].username;
         const userid = user[0].userid;
-        const token = jwt.sign({ userid, username }, "SecretKey", { expiresIn: "1h" });
+        const token = jwt.sign({ userid, username }, process.env.JWT_SECRET, { expiresIn: "1h" });
         return res.status(StatusCodes.OK).json({ message: "User logged in successfully", token });
 
 
@@ -62,7 +62,9 @@ async function login(req, res) {
 }
 
 async function check(req, res) {
-    res.send("User is logged in");
+    const username = req.user.username;
+    const userid = req.user.userid;
+    res.status(StatusCodes.OK).json({ message: "valid user ", username, userid });
 }
 
 module.exports = { register, login, check };
