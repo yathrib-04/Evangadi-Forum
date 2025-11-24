@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import axios from '../axiosConfig';
 import { useNavigate, Link } from 'react-router-dom';
+import evangadiLogo from '../components/evangadi-logo.jpg';
 
 function Register() {
   const navigate = useNavigate();
@@ -43,16 +44,16 @@ function Register() {
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans">
       {/* Header */}
-      <header className="w-full py-5 px-10 md:px-5 bg-white">
+      <header className="w-full py-5 px-10 md:px-5 bg-gray-50 border-b border-gray-200">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
           <div className="flex items-center">
-            <img src="/logo.svg" alt="EVANGADI" className="h-7" />
+            <img src={evangadiLogo} alt="EVANGADI" className="h-6 max-w-[120px] object-contain" />
           </div>
           <nav className="flex items-center gap-8 md:gap-4">
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-colors hover:text-gray-600">
+            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
               Home
             </Link>
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-colors hover:text-gray-600">
+            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
               How it Works
             </Link>
             <Link to="/login">
@@ -68,71 +69,71 @@ function Register() {
       <main className="flex-1 flex w-full min-h-[calc(100vh-200px)] lg:flex-row flex-col">
         {/* Left Panel - Register Form */}
         <div className="flex-1 relative flex items-center justify-center py-[60px] px-10 md:py-10 md:px-5 overflow-hidden wavy-bg">
-          <div className="relative z-10 bg-white rounded-lg py-10 px-6 md:py-8 md:px-5 w-full max-w-[380px] shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
-            <h1 className="text-[28px] md:text-2xl font-semibold text-gray-800 mb-3 leading-tight">
+          <div className="relative z-10 bg-white rounded-lg py-8 px-5 md:py-6 md:px-4 w-full max-w-[380px] shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
+            <h1 className="text-2xl md:text-xl font-semibold text-gray-800 mb-2 leading-tight">
               Join the network
             </h1>
-            <p className="text-base text-gray-800 mb-6 leading-normal">
+            <p className="text-sm text-gray-600 mb-5 leading-normal">
               Already have an account? <Link to="/login" className="text-[#ff6b35] no-underline font-medium hover:underline">
                 Sign in
               </Link>
             </p>
-            <form onSubmit={handleSubmit} className="mb-6">
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-2">
+            <form onSubmit={handleSubmit} className="mb-5">
+              <div className="mb-3">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-1.5">
                   Email
                 </label>
                 <input
                   type="email"
                   id="email"
                   ref={EmailDom}
-                  className="w-full py-3 px-4 text-base border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
+                  className="w-full py-2.5 px-3.5 text-sm border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
                   placeholder="Email"
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label htmlFor="firstname" className="block text-sm font-medium text-gray-800 mb-2">
+                  <label htmlFor="firstname" className="block text-sm font-medium text-gray-800 mb-1.5">
                     First Name
                   </label>
                   <input
                     type="text"
                     id="firstname"
                     ref={FirstNameDom}
-                    className="w-full py-3 px-4 text-base border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
+                    className="w-full py-2.5 px-3.5 text-sm border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
                     placeholder="First name"
                   />
                 </div>
                 <div>
-                  <label htmlFor="lastname" className="block text-sm font-medium text-gray-800 mb-2">
+                  <label htmlFor="lastname" className="block text-sm font-medium text-gray-800 mb-1.5">
                     Last Name
                   </label>
                   <input
                     type="text"
                     id="lastname"
                     ref={LastNameDom}
-                    className="w-full py-3 px-4 text-base border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
+                    className="w-full py-2.5 px-3.5 text-sm border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
                     placeholder="Last name"
                   />
                 </div>
               </div>
 
-              <div className="mb-4">
-                <label htmlFor="username" className="block text-sm font-medium text-gray-800 mb-2">
+              <div className="mb-3">
+                <label htmlFor="username" className="block text-sm font-medium text-gray-800 mb-1.5">
                   User Name
                 </label>
                 <input
                   type="text"
                   id="username"
                   ref={UserNameDom}
-                  className="w-full py-3 px-4 text-base border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
+                  className="w-full py-2.5 px-3.5 text-sm border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
                   placeholder="Username"
                 />
               </div>
 
-              <div className="mb-4">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-800 mb-2">
+              <div className="mb-3">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-800 mb-1.5">
                   Password
                 </label>
                 <div className="relative">
@@ -140,16 +141,16 @@ function Register() {
                     type={showPassword ? "text" : "password"}
                     id="password"
                     ref={PasswordDom}
-                    className="w-full py-3 px-4 pr-11 text-base border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
+                    className="w-full py-2.5 px-3.5 pr-10 text-sm border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4]"
                     placeholder="Password"
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer p-1 flex items-center justify-center text-gray-600 hover:opacity-70"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer p-1 flex items-center justify-center text-gray-600 hover:opacity-70"
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       {showPassword ? (
                         <>
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -169,20 +170,20 @@ function Register() {
 
               <button 
                 type="submit" 
-                className="w-full bg-[#4285f4] text-white border-none py-3 px-6 text-base font-medium rounded cursor-pointer mt-6 transition-colors hover:bg-[#357ae8]"
+                className="w-full bg-[#4285f4] text-white border-none py-2.5 px-5 text-sm font-medium rounded cursor-pointer mt-4 transition-colors hover:bg-[#357ae8]"
               >
                 Agree and Join
               </button>
             </form>
 
-            <p className="text-sm text-gray-800 mt-5 leading-normal">
+            <p className="text-xs text-gray-600 mt-4 leading-normal">
               I agree to the{' '}
               <Link to="/" className="text-[#ff6b35] no-underline hover:underline">privacy policy</Link>
               {' '}and{' '}
               <Link to="/" className="text-[#ff6b35] no-underline hover:underline">terms of service</Link>.
             </p>
 
-            <p className="text-center text-sm text-gray-600 mt-2.5">
+            <p className="text-center text-xs text-gray-600 mt-3">
               <Link to="/login" className="text-[#ff6b35] no-underline font-medium hover:underline">
                 Already have an account?
               </Link>
@@ -197,18 +198,14 @@ function Register() {
               About
             </h2>
             <h1 className="text-[42px] md:text-3xl font-bold text-gray-800 mb-8 leading-tight">
-              Evangadi Networks Q&A
+              Evangadi Networks 
             </h1>
             <div className="mb-10">
               <p className="text-base leading-[1.6] text-gray-800 mb-5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
+              No matter what stage of life you are in, whether you're just starting elementary school or being promoted to CEO of a Fortune 500 company, you have much to offer to those who are trying to follow ir your footsteps.</p>
               <p className="text-base leading-[1.6] text-gray-800 mb-5">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-              <p className="text-base leading-[1.6] text-gray-800 mb-0">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-              </p>
+              Wheather you are willing to share your knowledge or you are just looking to meet mentors of your own, please start by joining the network here. </p>
+            
             </div>
             <button className="bg-[#ff6b35] text-white border-none py-3 px-6 text-base font-medium rounded cursor-pointer uppercase tracking-wide transition-colors hover:bg-[#e55a2b]">
               HOW IT WORKS
@@ -222,7 +219,7 @@ function Register() {
         <div className="max-w-[1400px] mx-auto flex justify-between items-start gap-[60px] lg:flex-row flex-col relative z-10">
           <div className="flex-1">
             <div className="mb-5">
-              <img src="/logo.svg" alt="EVANGADI" className="h-6" style={{ filter: 'brightness(0) invert(1)' }} />
+              <img src={evangadiLogo} alt="EVANGADI" className="h-5 max-w-[100px] object-contain" />
             </div>
             <div className="flex gap-4">
               <a href="#" className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full text-white no-underline text-lg font-semibold transition-colors hover:bg-white/20" aria-label="Facebook">
