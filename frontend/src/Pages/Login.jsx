@@ -1,8 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import axios from '../axiosConfig';
 import { useNavigate, Link } from 'react-router-dom';
+import { Appstate } from '../App';
+import evangadiLogo from '../components/evangadi-logo.jpg';
 
 function Login() {
+  const { setUser } = useContext(Appstate);
   const navigate = useNavigate();
   const EmailDom = useRef(null);
   const PasswordDom = useRef(null);
@@ -24,6 +27,7 @@ function Login() {
       });
       alert('Login successful!');
       localStorage.setItem('token', response.data.token);
+      setUser({ username: response.data.username, userid: response.data.userid });
       navigate('/');
       console.log(response);
     } catch (error) {
@@ -35,16 +39,16 @@ function Login() {
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans">
       {/* Header */}
-      <header className="w-full py-5 px-10 md:px-5 bg-white">
+      <header className="w-full py-5 px-10 md:px-5 bg-gray-50 border-b border-gray-200">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
           <div className="flex items-center">
-            <img src="/logo.svg" alt="EVANGADI" className="h-7" />
+            <img src={evangadiLogo} alt="EVANGADI" className="h-6 max-w-[120px] object-contain" />
           </div>
           <nav className="flex items-center gap-8 md:gap-4">
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-colors hover:text-gray-600">
+            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
               Home
             </Link>
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-colors hover:text-gray-600">
+            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
               How it Works
             </Link>
             <button className="bg-[#4285f4] text-white border-none py-2.5 px-6 md:py-2 md:px-4 text-sm md:text-xs font-medium rounded cursor-pointer uppercase tracking-wide transition-colors hover:bg-[#357ae8]">
@@ -134,18 +138,13 @@ function Login() {
               About
             </h2>
             <h1 className="text-[42px] md:text-3xl font-bold text-gray-800 mb-8 leading-tight">
-              Evangadi Networks Q&A
+              Evangadi Networks 
             </h1>
             <div className="mb-10">
               <p className="text-base leading-[1.8] text-gray-600 mb-5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
+              No matter what stage of life you are in, whether you're just starting elementary school or being promoted to CEO of a Fortune 500 company, you have much to offer to those who are trying to follow ir your footsteps. </p>
               <p className="text-base leading-[1.8] text-gray-600 mb-5">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-              <p className="text-base leading-[1.8] text-gray-600 mb-0">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-              </p>
+              Wheather you are willing to share your knowledge or you are just looking to meet mentors of your own, please start by joining the network here.</p>
             </div>
             <button className="bg-[#ff6b35] text-white border-none py-3.5 px-8 text-sm font-semibold rounded cursor-pointer uppercase tracking-wide transition-colors hover:bg-[#e55a2b]">
               HOW IT WORKS
@@ -159,7 +158,7 @@ function Login() {
         <div className="max-w-[1400px] mx-auto flex justify-between items-start gap-[60px] lg:flex-row flex-col relative z-10">
           <div className="flex-1">
             <div className="mb-5">
-              <img src="/logo.svg" alt="EVANGADI" className="h-6" style={{ filter: 'brightness(0) invert(1)' }} />
+              <img src={evangadiLogo} alt="EVANGADI" className="h-5 max-w-[100px] object-contain" />
             </div>
             <div className="flex gap-4">
               <a href="#" className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full text-white no-underline text-lg font-semibold transition-colors hover:bg-white/20" aria-label="Facebook">
