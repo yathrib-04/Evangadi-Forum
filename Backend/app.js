@@ -22,7 +22,7 @@ const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
 
 
-// Question routes
+// Question routes (protected by authMiddleware)
 const questionRouter = require("./routes/questionRouter");
 app.use("/api/questions", questionRouter);
 
@@ -30,7 +30,7 @@ app.use("/api/questions", questionRouter);
 
 // answer routes (protected by authMiddleware)
 const answerRouter = require("./routes/answerRouter");
-app.use("/api/answers", authMiddleware, answerRouter);
+app.use("/api/answers", answerRouter);
 
 const { swaggerUi, swaggerDocs } = require("./swagger");
 
