@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import evangadiLogo from './evangadi-logo.jpg';
 
 function Footer() {
   return (
@@ -7,7 +8,7 @@ function Footer() {
       <div className="max-w-[1400px] mx-auto flex justify-between items-start gap-[60px] lg:flex-row flex-col relative z-10">
         <div className="flex-1">
           <div className="mb-5">
-            <img src="/logo-evangadi.svg" alt="EVANGADI" className="h-6" />
+            <img src={evangadiLogo} alt="EVANGADI" className="h-5 max-w-[100px] object-contain" />
           </div>
           <div className="flex gap-4">
             <a href="#" className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-full text-white no-underline text-lg font-semibold transition-colors hover:bg-white/20" aria-label="Facebook">
