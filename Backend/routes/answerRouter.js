@@ -5,11 +5,14 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 // Answer controller
 const { postAnswer, getAnswers } = require("../Controller/answerController");
 
+// Apply authentication middleware to all answer routes
+router.use(authMiddleware);
+
 // Post an answer
-router.post("", authMiddleware, postAnswer);
+router.post("", postAnswer);
 
 // Get answers for a question
-router.get("/:questionid", authMiddleware, getAnswers);
+router.get("/:questionid", getAnswers);
 
 /**
  * @swagger
