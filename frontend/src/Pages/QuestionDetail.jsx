@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Appstate } from '../App';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from '../axiosConfig';
+import evangadiLogo from '../components/evangadi-logo.jpg';
 
 function QuestionDetail() {
   const { user, setUser } = useContext(Appstate);
@@ -97,16 +98,16 @@ function QuestionDetail() {
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* Header */}
-      <header className="w-full py-5 px-10 md:px-5 bg-white border-b border-gray-200">
+      <header className="w-full py-5 px-10 md:px-5 bg-gray-50 border-b border-gray-200">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
           <div className="flex items-center">
-            <img src="/logo.svg" alt="EVANGADI" className="h-7" />
+            <img src={evangadiLogo} alt="EVANGADI" className="h-6 max-w-[120px] object-contain" />
           </div>
           <nav className="flex items-center gap-8 md:gap-4">
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-colors hover:text-gray-600">
+            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
               Home
             </Link>
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-colors hover:text-gray-600">
+            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
               How it Works
             </Link>
             <button 
