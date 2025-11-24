@@ -3,14 +3,17 @@ const router = express.Router();
 const { authMiddleware } = require("../middleware/authMiddleware");
 const { postQuestion, allQuestions, singleQuestion } = require("../Controller/questionController");
 
+// Apply authentication middleware to all question routes
+router.use(authMiddleware);
+
 // Post a new question
-router.post("", authMiddleware, postQuestion);
+router.post("", postQuestion);
 
 // Get all questions
-router.get("", authMiddleware, allQuestions);
+router.get("", allQuestions);
 
 // Get a single question
-router.get("/:questionid", authMiddleware, singleQuestion);
+router.get("/:questionid", singleQuestion);
 
 /**
  * @swagger
