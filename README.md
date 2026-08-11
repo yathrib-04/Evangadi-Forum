@@ -89,14 +89,22 @@ cd Backend
 npm install
 ```
 
-Create `.env`:
+Create `.env` by copying the template:
+
+```bash
+cp .env.example .env
+```
+
+Then fill it in:
 
 ```env
 PORT=5000
-USER=your_mysql_username
-PASSWORD=your_mysql_password
-DATABASE=evangadi_forum
-DATABASE_URL=mysql://your_mysql_username:your_mysql_password@localhost:3306/evangadi_forum
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=your_mysql_username
+DB_PASSWORD=your_mysql_password
+DB_NAME=evangadi_forum
+DATABASE_URL="mysql://your_mysql_username:your_mysql_password@localhost:3306/evangadi_forum"
 JWT_SECRET=your_jwt_secret_key_here
 ```
 
@@ -112,6 +120,29 @@ Run migrations:
 npx prisma migrate deploy
 ```
 
+#### Note on this machine's MySQL setup
+
+The machine-wide **MySQL80** Windows service requires admin rights to start and
+its root password is unknown, so this project runs its **own** MySQL instance
+using the same `mysqld` binary:
+
+| | |
+|---|---|
+| Data directory | `C:\Users\hp\evangadi-mysql\data` |
+| Port | `3307` (the service, if ever started, keeps `3306`) |
+| User | `root` |
+
+It is a normal process, not a service, so it does **not** restart after a
+reboot. Start it with:
+
+```bash
+npm run db          # from Backend/, leave the window open
+```
+
+The MySQL80 service and its data directory are left completely untouched. If
+you later gain admin access and want to use it instead, start that service and
+point `DB_PORT` / `DATABASE_URL` in `.env` back at `3306`.
+
 ### 3. Frontend Setup
 
 ```bash
@@ -125,7 +156,7 @@ npm install
 
 ```bash
 cd Backend
-node app.js
+npm start        # or `npm run dev` for auto-reload via nodemon
 ```
 
 Backend runs on: `http://localhost:5000`

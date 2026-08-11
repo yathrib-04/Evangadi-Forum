@@ -1,3 +1,6 @@
+// prisma.config.ts is evaluated before Prisma loads .env, so DATABASE_URL has
+// to be pulled in explicitly or `env()` below throws.
+import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({

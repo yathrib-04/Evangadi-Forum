@@ -1,3 +1,7 @@
+// This schema describes the database the app actually queries (see
+// Backend/Controller/*.js, which use raw mysql2 SQL). Table and column names are
+// mapped explicitly so Prisma and the raw queries stay in agreement.
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,34 +12,39 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  username   String    @unique
-  firstname  String
-  lastname   String
-  email      String    @unique
-  password   String
-  createdAt  DateTime  @default(now())
-  questions  Question[]
-  answers    Answer[]
+  userid    Int        @id @default(autoincrement())
+  username  String     @unique
+  firstname String
+  lastname  String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now()) @map("created_at")
+  questions Question[]
+  answers   Answer[]
+
+  @@map("users")
 }
 
 model Question {
-  id          Int       @id @default(autoincrement())
+  questionid  String   @id @default(uuid()) @db.Char(36)
   title       String
-  description String
-  createdAt   DateTime  @default(now())
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  description String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  userid      Int
+  user        User     @relation(fields: [userid], references: [userid])
   answers     Answer[]
+
+  @@map("questions")
 }
 
 model Answer {
-  id          Int       @id @default(autoincrement())
-  content     String
-  createdAt   DateTime  @default(now())
-  userId      Int
-  questionId  Int
-  user        User      @relation(fields: [userId], references: [id])
-  question    Question  @relation(fields: [questionId], references: [id])
-}
+  answerid   Int      @id @default(autoincrement())
+  answer     String   @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  userid     Int
+  questionid String   @db.Char(36)
+  user       User     @relation(fields: [userid], references: [userid])
+  question   Question @relation(fields: [questionid], references: [questionid])
 
+  @@map("answers")
+}

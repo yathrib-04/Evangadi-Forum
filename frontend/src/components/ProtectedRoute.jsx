@@ -16,16 +16,10 @@ function ProtectedRoute({ children }) {
     const token = localStorage.getItem('token');
     
     // If no token exists, immediately set as not authenticated
-    if (!token) {
-      console.log('No token found, redirecting to login');
-      setLoading(false);
+    if (!token) {      setLoading(false);
       setIsAuthenticated(false);
       return;
-    }
-
-    console.log('Token found, verifying with backend...');
-
-    try {
+    }    try {
       const { data } = await axios.get('/users/check', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -33,14 +27,10 @@ function ProtectedRoute({ children }) {
       });
       
       // If authentication successful, set user and allow access
-      if (data && data.username && data.userid) {
-        console.log('Authentication successful');
-        setUser({ username: data.username, userid: data.userid });
+      if (data && data.username && data.userid) {        setUser({ username: data.username, userid: data.userid });
         setIsAuthenticated(true);
       } else {
-        // Invalid response format
-        console.log('Invalid response format, clearing token');
-        localStorage.removeItem('token');
+        // Invalid response format        localStorage.removeItem('token');
         setUser(null);
         setIsAuthenticated(false);
       }

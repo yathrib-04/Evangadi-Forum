@@ -4,6 +4,7 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import AskQuestion from "./Pages/AskQuestion";
 import QuestionDetail from "./Pages/QuestionDetail";
+import HowItWorks from "./Pages/HowItWorks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import {useState, createContext} from 'react';
 
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
         <Route 
           path="/" 
           element={

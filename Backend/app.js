@@ -1,18 +1,11 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
-const port = process.env.PORT || 5000;
-const cors =  require("cors");
 
-// this tells the server to allow requests from any origin ot it is like it is okat for the requsets to comefrom any domain 
-app.use(cors());
-
-// DB connection
-const dbconnection = require("./DB/dbConfig");
-
-// Authentication middleware
-const { authMiddleware } = require("./middleware/authMiddleware");
-
+// Allow the React dev server (and anything set in CORS_ORIGIN) to call the API.
+app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:3000" }));
 
 // JSON Middleware to parse request body
 app.use(express.json());
@@ -21,12 +14,9 @@ app.use(express.json());
 const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
 
-
 // Question routes (protected by authMiddleware)
 const questionRouter = require("./routes/questionRouter");
 app.use("/api/questions", questionRouter);
-
-
 
 // answer routes (protected by authMiddleware)
 const answerRouter = require("./routes/answerRouter");
@@ -37,19 +27,15 @@ const { swaggerUi, swaggerDocs } = require("./swagger");
 // Serve Swagger API documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Async function to test DB connection and start server
-async function testDB() {
-  try {
-    await dbconnection.execute("SELECT 'test' AS test_col");
-    console.log("Database connected successfully.");
-  } catch (error) {
-    console.error("Database connection failed:", error.message);
-  } finally {
-    
-    app.listen(port, () => {
-      console.log(`Server is listening on port ${port}`);
-    });
-  }
-}
+// Health check - useful for deployment probes.
+app.get("/health", (req, res) => res.status(200).json({ status: "ok" }));
 
-testDB();
+// Unknown API routes should 404 as JSON rather than fall through to Express's
+// HTML error page.
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: "Not Found", message: "No such endpoint" });
+});
+
+// This module only builds the app - see server.js for starting it. Keeping the
+// two apart is what lets the test suite drive the app without binding a port.
+module.exports = app;
