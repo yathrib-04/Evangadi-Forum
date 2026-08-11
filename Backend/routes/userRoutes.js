@@ -17,6 +17,9 @@ router.post("/login", login);
 // check login
 router.get("/check", authMiddleware, check);
 
+// delete own account
+router.delete("/:userid", authMiddleware, deleteUser);
+
 
 /**
  * @swagger
