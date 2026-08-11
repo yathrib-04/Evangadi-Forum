@@ -17,7 +17,7 @@ function Header({ onLogout }) {
           <Link to="/" className="text-gray-700 no-underline text-base font-normal transition-colors duration-200 hover:text-evangadi-orange">
             Home
           </Link>
-          <Link to="/" className="text-gray-700 no-underline text-base font-normal transition-colors duration-200 hover:text-evangadi-orange">
+          <Link to="/how-it-works" className="text-gray-700 no-underline text-base font-normal transition-colors duration-200 hover:text-evangadi-orange">
             How it Works
           </Link>
           {onLogout ? (
