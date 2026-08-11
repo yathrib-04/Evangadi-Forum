@@ -34,7 +34,7 @@ function Footer() {
         <div>
           <h3 className="text-xl font-semibold text-white mb-6">Useful Link</h3>
           <div className="flex flex-col gap-4">
-            <Link to="/" className="text-white/90 no-underline text-base transition-colors hover:text-evangadi-orange">
+            <Link to="/how-it-works" className="text-white/90 no-underline text-base transition-colors hover:text-evangadi-orange">
               How it works
             </Link>
             <Link to="/" className="text-white/90 no-underline text-base transition-colors hover:text-evangadi-orange">
