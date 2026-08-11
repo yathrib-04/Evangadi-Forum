@@ -1,7 +1,8 @@
 const dbConnection = require("../DB/dbConfig");
 const { StatusCodes } = require("http-status-codes");
-const jwt = require("jsonwebtoken");
-const{v4:uuidv4} = require("uuid");
+// Node's built-in UUID generator - the `uuid` package is ESM-only from v13,
+// which CommonJS consumers (including the test runner) cannot require.
+const { randomUUID } = require("crypto");
 
 // POST /api/question
 async function postQuestion(req, res) {
@@ -16,7 +17,7 @@ async function postQuestion(req, res) {
     }
 
     try {
-          const questionid = uuidv4(); // generate unique questionid
+        const questionid = randomUUID(); // generate unique questionid
         await dbConnection.query(
             `INSERT INTO questions (questionid, userid, title, description) VALUES (?, ?, ?, ?)`,
             [questionid, userid, title, description]
