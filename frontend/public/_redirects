@@ -1,0 +1,9 @@
+# Netlify SPA fallback.
+#
+# React Router handles routing in the browser, so the host must serve
+# index.html for every path instead of looking for a matching file. Without
+# this, a direct visit or refresh on /how-it-works, /login or /register
+# returns 404 - only / would work.
+#
+# CRA copies everything in public/ into build/, so this ships automatically.
+/*  /index.html  200

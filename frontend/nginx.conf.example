@@ -1,0 +1,32 @@
+# nginx config for serving the built frontend (self-hosted, Docker, or any
+# host that is not Netlify/Vercel). Copy into your server config and adjust
+# server_name and root.
+#
+# The `try_files ... /index.html` line is the SPA fallback: React Router owns
+# routing in the browser, so every unmatched path must return index.html.
+# Without it, a direct visit or refresh on /how-it-works returns 404.
+
+server {
+  listen 80;
+  server_name your-domain.example.com;
+
+  root /var/www/evangadi-forum;   # the contents of frontend/build
+  index index.html;
+
+  # Hashed CRA assets are immutable - cache them hard.
+  location /static/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+    try_files $uri =404;
+  }
+
+  # index.html must never be cached, or users get a stale bundle after a deploy.
+  location = /index.html {
+    add_header Cache-Control "no-cache, no-store, must-revalidate";
+  }
+
+  # SPA fallback - everything else renders the app.
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+}
