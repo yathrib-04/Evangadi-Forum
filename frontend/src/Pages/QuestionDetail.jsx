@@ -22,11 +22,7 @@ function QuestionDetail() {
 
   async function fetchQuestion() {
     try {
-      const { data } = await axios.get(`/questions/${questionid}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      const { data } = await axios.get(`/questions/${questionid}`);
       setQuestion(data.question);
       setLoading(false);
     } catch (error) {
@@ -37,11 +33,7 @@ function QuestionDetail() {
 
   async function fetchAnswers() {
     try {
-      const { data } = await axios.get(`/answers/${questionid}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      const { data } = await axios.get(`/answers/${questionid}`);
       setAnswers(data.answers || []);
     } catch (error) {
       console.error('Error fetching answers:', error);
@@ -59,14 +51,7 @@ function QuestionDetail() {
 
     setSubmitting(true);
     try {
-      await axios.post('/answers', {
-        questionid,
-        answer,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      await axios.post('/answers', { questionid, answer });
       answerDom.current.value = '';
       fetchAnswers();
       alert('Answer posted successfully!');
