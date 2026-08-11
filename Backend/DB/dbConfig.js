@@ -1,24 +1,15 @@
-const mysql2 = require('mysql2');
-require('dotenv').config();
+const mysql2 = require("mysql2");
+require("dotenv").config();
 
+// NOTE: use DB_-prefixed names. `process.env.USER` is a shell built-in on
+// Linux/macOS and would silently override whatever is set in .env.
 const dbconnection = mysql2.createPool({
-  host: 'localhost',
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
+  host: process.env.DB_HOST || "localhost",
+  port: Number(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   connectionLimit: 10,
 });
 
-
-
-// dbconnection.execute("select 'test'", (err, results) => {
-//   if (err) {
-//     console.error(err.message);
-//     return;
-//   }
-//   console.log( results);
-// });
-
-
-
-module.exports=dbconnection.promise();
+module.exports = dbconnection.promise();
