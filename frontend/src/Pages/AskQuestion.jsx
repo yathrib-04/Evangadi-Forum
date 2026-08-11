@@ -25,14 +25,7 @@ function AskQuestion() {
 
     setLoading(true);
     try {
-      await axios.post('/questions', {
-        title,
-        description,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      await axios.post('/questions', { title, description });
       alert('Question posted successfully!');
       navigate('/');
     } catch (error) {
