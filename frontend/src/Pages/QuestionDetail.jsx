@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Appstate } from '../App';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from '../axiosConfig';
-import evangadiLogo from '../components/evangadi-logo.jpg';
+import Header from '../components/Header';
+import useLogout from '../hooks/useLogout';
 
 function QuestionDetail() {
-  const { user, setUser } = useContext(Appstate);
-  const navigate = useNavigate();
+  const { user } = useContext(Appstate);
+  const handleLogout = useLogout();
   const { questionid } = useParams();
   const answerDom = useRef(null);
   const [question, setQuestion] = useState(null);
@@ -77,12 +78,6 @@ function QuestionDetail() {
     }
   }
 
-  function handleLogout() {
-    localStorage.removeItem('token');
-    setUser(null);
-    navigate('/login');
-  }
-
   if (!user) {
     return <h2>Loading...</h2>;
   }
@@ -97,31 +92,10 @@ function QuestionDetail() {
 
   return (
     <div className="min-h-screen bg-white font-sans">
-      {/* Header */}
-      <header className="w-full py-5 px-10 md:px-5 bg-gray-50 border-b border-gray-200">
-        <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-          <div className="flex items-center">
-            <img src={evangadiLogo} alt="EVANGADI" className="h-6 max-w-[120px] object-contain" />
-          </div>
-          <nav className="flex items-center gap-8 md:gap-4">
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
-              Home
-            </Link>
-            <Link to="/" className="text-gray-800 no-underline text-base font-normal transition-all duration-200 hover:text-[#ff6b35] hover:underline hover:underline-offset-4">
-              How it Works
-            </Link>
-            <button 
-              onClick={handleLogout}
-              className="bg-[#4285f4] text-white border-none py-2.5 px-6 text-sm font-medium rounded cursor-pointer transition-colors hover:bg-[#357ae8]"
-            >
-              LogOut
-            </button>
-          </nav>
-        </div>
-      </header>
+      <Header onLogout={handleLogout} />
 
       {/* Main Content */}
-      <main className="max-w-[900px] mx-auto px-8 md:px-5 py-12 flex flex-col gap-10">
+      <main className="max-w-[1300px] mx-auto px-8 md:px-5 py-12 flex flex-col gap-10">
         {/* Question Section */}
         <div className="pb-6 border-b border-gray-200">
           <h1 className="text-2xl font-semibold text-gray-900 mb-3">Question</h1>
@@ -139,14 +113,14 @@ function QuestionDetail() {
           ) : (
             <div className="space-y-6">
               {answers.map((answer) => (
-                <div key={answer.answerid} className="flex items-start gap-4">
+                <div key={answer.answerid} className="flex items-center gap-6">
                   <div className="flex flex-col items-center gap-2 flex-shrink-0">
-                    <div className="w-14 h-14 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#666"/>
+                    <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#ffffff"/>
                       </svg>
                     </div>
-                    <span className="text-xs text-gray-600 text-center max-w-[60px] truncate">{answer.username}</span>
+                    <span className="text-sm text-gray-600 text-center max-w-[80px] truncate">{answer.username}</span>
                   </div>
                   <div className="flex-1">
                     <p className="text-base text-gray-800">{answer.answer}</p>
@@ -164,12 +138,12 @@ function QuestionDetail() {
             Go to Question page
           </Link>
 
-          <form onSubmit={handleSubmit} className="max-w-[640px] mx-auto">
+          <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <textarea
                 ref={answerDom}
                 rows="8"
-                className="w-full py-3 px-4 text-base border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-[#4285f4] resize-none"
+                className="w-full py-3 px-4 text-base border border-gray-300 rounded bg-white text-gray-800 transition-colors focus:outline-none focus:border-evangadi-blue resize-none"
                 placeholder="Your Answer..."
               />
             </div>
@@ -177,7 +151,7 @@ function QuestionDetail() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-[#4285f4] text-white border-none py-3 px-6 text-base font-medium rounded cursor-pointer transition-colors hover:bg-[#357ae8] disabled:opacity-50"
+              className="bg-evangadi-blue text-white border-none py-3 px-6 text-base font-medium rounded cursor-pointer transition-colors hover:bg-evangadi-blue-dark disabled:opacity-50"
             >
               {submitting ? 'Posting...' : 'Post Your Answer'}
             </button>
