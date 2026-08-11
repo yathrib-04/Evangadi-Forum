@@ -11,9 +11,12 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API documentation for the Evangadi Forum",
     },
+    // Must not be hardcoded: Swagger UI sends "Try it out" requests to this
+    // host, so a localhost value makes the deployed docs hit the reader's own
+    // machine. Set PUBLIC_API_URL to the deployed API origin.
     servers: [
       {
-        url: "http://localhost:5000",
+        url: process.env.PUBLIC_API_URL || `http://localhost:${process.env.PORT || 5000}`,
       },
     ],
     components: {
