@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Right-hand panel shared by Login and Register. Previously duplicated in both
 // pages, which let the two drift apart (different text colours, line heights
@@ -21,9 +22,12 @@ function AboutPanel() {
             Wheather you are willing to share your knowledge or you are just looking to meet mentors of your own, please start by joining the network here.
           </p>
         </div>
-        <button className="bg-evangadi-orange text-white border-none py-3.5 px-8 text-sm font-semibold rounded cursor-pointer uppercase tracking-wide transition-colors hover:bg-evangadi-orange-dark">
+        <Link
+          to="/how-it-works"
+          className="inline-block bg-evangadi-orange text-white no-underline py-3.5 px-8 text-sm font-semibold rounded uppercase tracking-wide transition-colors hover:bg-evangadi-orange-dark"
+        >
           HOW IT WORKS
-        </button>
+        </Link>
       </div>
     </div>
   );
