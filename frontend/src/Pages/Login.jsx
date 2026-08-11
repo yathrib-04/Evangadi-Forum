@@ -31,7 +31,6 @@ function Login() {
       localStorage.setItem('token', response.data.token);
       setUser({ username: response.data.username, userid: response.data.userid });
       navigate('/');
-      console.log(response);
     } catch (error) {
       console.error("Error during login:", error.response?.data || error.message);
       alert(error.response?.data?.message || 'Something went wrong.');
