@@ -1,25 +1,11 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
-const port = process.env.PORT || 5000;
 const cors = require("cors");
 
-// Fail fast on missing config rather than handing out unsigned/undecodable tokens.
-const requiredEnv = ["DB_USER", "DB_NAME", "JWT_SECRET"];
-const missingEnv = requiredEnv.filter((key) => !process.env[key]);
-if (missingEnv.length > 0) {
-  console.error(
-    `Missing required environment variables: ${missingEnv.join(", ")}\n` +
-      "Copy Backend/.env.example to Backend/.env and fill it in."
-  );
-  process.exit(1);
-}
+const app = express();
 
 // Allow the React dev server (and anything set in CORS_ORIGIN) to call the API.
 app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:3000" }));
-
-// DB connection
-const dbconnection = require("./DB/dbConfig");
 
 // JSON Middleware to parse request body
 app.use(express.json());
@@ -41,21 +27,15 @@ const { swaggerUi, swaggerDocs } = require("./swagger");
 // Serve Swagger API documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Verify the DB is reachable before accepting traffic - the API is useless
-// without it, so a failure here should stop the process, not be swallowed.
-async function start() {
-  try {
-    await dbconnection.execute("SELECT 'test' AS test_col");
-    console.log("Database connected successfully.");
-  } catch (error) {
-    console.error("Database connection failed:", error.message);
-    process.exit(1);
-  }
+// Health check - useful for deployment probes.
+app.get("/health", (req, res) => res.status(200).json({ status: "ok" }));
 
-  app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
-    console.log(`Swagger docs available at http://localhost:${port}/api-docs`);
-  });
-}
+// Unknown API routes should 404 as JSON rather than fall through to Express's
+// HTML error page.
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: "Not Found", message: "No such endpoint" });
+});
 
-start();
+// This module only builds the app - see server.js for starting it. Keeping the
+// two apart is what lets the test suite drive the app without binding a port.
+module.exports = app;
