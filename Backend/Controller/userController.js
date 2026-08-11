@@ -71,12 +71,17 @@ async function check(req, res) {
 
 
 
-    // delete user function
-    async function deleteUser(req, res) {
+// Delete a user. Callers may only delete their own account - without this check
+// any authenticated user could delete anyone else by guessing an id.
+async function deleteUser(req, res) {
     const { userid } = req.params; // get the user ID from URL
 
+    if (Number(userid) !== Number(req.user.userid)) {
+        return res.status(StatusCodes.FORBIDDEN).json({ message: "You can only delete your own account" });
+    }
+
     try {
-        const [user] = await dbconnection.query("SELECT * FROM users WHERE userid = ?", [userid]);
+        const [user] = await dbconnection.query("SELECT userid FROM users WHERE userid = ?", [userid]);
         if (user.length === 0) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
         }
@@ -85,6 +90,12 @@ async function check(req, res) {
         return res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
     } catch (error) {
         console.log(error.message);
+        // questions/answers reference users with ON DELETE RESTRICT
+        if (error.code === "ER_ROW_IS_REFERENCED_2") {
+            return res.status(StatusCodes.CONFLICT).json({
+                message: "Cannot delete an account that still has questions or answers",
+            });
+        }
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong" });
     }
 }
