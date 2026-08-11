@@ -17,11 +17,7 @@ function Home() {
 
   async function fetchQuestions() {
     try {
-      const { data } = await axios.get('/questions', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      const { data } = await axios.get('/questions');
       setQuestions(data.questions || []);
       setLoading(false);
     } catch (error) {
