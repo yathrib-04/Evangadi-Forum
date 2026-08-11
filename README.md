@@ -1,180 +1,334 @@
-# 📘 Evangadi Forum
+# Evangadi Forum
 
-A full-stack Q&A platform where users can ask questions, post answers, and engage in community discussions. Built with React, Node.js, Express, MySQL, and JWT authentication, with complete API documentation via Swagger.
+A full-stack question-and-answer platform for the Evangadi Networks community.
+Members register, ask questions, and answer each other — a focused Stack
+Overflow for a single network.
 
-## 📝 Overview
+React 19 · Node.js · Express 5 · MySQL 8 · JWT · Tailwind CSS · Swagger
 
-Evangadi Forum allows users to:
+---
 
-- Register and authenticate securely
-- Post questions and browse all community questions
-- View detailed question pages with answers
-- Submit answers to any question
+## Contents
 
-The system uses a modular architecture: React frontend, Express backend, and MySQL database managed with Prisma ORM.
+- [Features](#features)
+- [Tech stack](#tech-stack)
+- [Project structure](#project-structure)
+- [Getting started](#getting-started)
+- [Running the app](#running-the-app)
+- [API reference](#api-reference)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Environment variables](#environment-variables)
+- [Known limitations](#known-limitations)
+- [License](#license)
 
-## ✨ Core Features
+---
 
-### 🔐 Authentication
+## Features
 
-- User registration & login
-- Secure password hashing (bcrypt)
-- JWT-based session handling
-- Protected routes & API endpoints
+**Authentication**
+Registration with a enforced password policy (8+ characters, upper, lower,
+digit, symbol), bcrypt hashing, and stateless JWT sessions with a 2-hour
+expiry. Protected routes on both the client and the API.
 
-### ❓ Question Management
+**Questions and answers**
+Post a question, browse the community feed newest-first, open a question to
+read its answers, and contribute your own. Every question and answer is
+credited to its author.
 
-- Create new questions
-- Fetch all questions (sorted by newest)
-- View detailed single-question page
+**Interactive API documentation**
+Swagger UI at `/api-docs`, generated from JSDoc annotations that live beside
+the route definitions.
 
-### 💬 Answer System
+**Responsive interface**
+Tailwind CSS with a centralised brand palette, shared layout components, and
+accessible forms.
 
-- Submit answers
-- View all answers for each question
-- Author information included
+---
 
-### 📘 API Documentation
+## Tech stack
 
-- Fully interactive Swagger UI
-- Available at: `/api-docs`
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, React Router 7, Axios, Tailwind CSS 3, Create React App |
+| Backend | Node.js, Express 5, `mysql2` (parameterised raw SQL) |
+| Database | MySQL 8, schema managed by Prisma Migrate |
+| Auth | `jsonwebtoken`, `bcrypt` |
+| Docs | `swagger-jsdoc`, `swagger-ui-express` |
+| Tests | Jest + Supertest (backend), Jest + React Testing Library (frontend) |
 
-### 🎨 Modern UI
+**A note on Prisma.** Prisma owns the schema and migrations only. The
+application queries MySQL through `mysql2` with parameterised SQL; the Prisma
+client is not used at runtime. `prisma/schema.prisma` is kept accurate so
+migrations and the queries stay in agreement.
 
-- Fully responsive UI
-- Tailwind CSS
-- Smooth animations & mobile-friendly design
+---
 
-## 🛠️ Tech Stack
+## Project structure
 
-### Backend
+```
+Evangadi-Forum/
+├── Backend/
+│   ├── app.js                  Express app - built and exported, not started
+│   ├── server.js               Entry point: env checks, DB probe, listen()
+│   ├── Controller/             Route handlers (raw parameterised SQL)
+│   ├── routes/                 Routers + Swagger JSDoc annotations
+│   ├── middleware/             JWT verification
+│   ├── DB/dbConfig.js          mysql2 connection pool
+│   ├── prisma/                 Schema and migrations
+│   ├── scripts/                Local MySQL launcher, test-DB provisioning
+│   └── tests/                  Integration tests (57)
+└── frontend/
+    └── src/
+        ├── Pages/              Login, Register, Home, AskQuestion,
+        │                       QuestionDetail, HowItWorks (+ tests)
+        ├── components/         Header, Footer, AboutPanel, ProtectedRoute
+        ├── hooks/useLogout.js  Shared logout behaviour
+        └── axiosConfig.js      API client + auth interceptor
+```
 
-- Node.js
-- Express.js
-- MySQL
-- Prisma ORM
-- JWT (jsonwebtoken)
-- bcrypt
-- Swagger (swagger-jsdoc, swagger-ui-express)
-- CORS
-- dotenv
+`app.js` and `server.js` are deliberately separate: the test suite imports the
+app and drives it without binding a port.
 
-### Frontend
+---
 
-- React 19
-- React Router DOM
-- Axios
-- Tailwind CSS
-- PostCSS & Autoprefixer
-
-## 🚀 Installation & Setup
+## Getting started
 
 ### Prerequisites
 
-- Node.js v14+
-- MySQL v8+
-- npm or yarn
+- Node.js 18 or newer
+- MySQL 8
+- npm
 
-### 1. Clone Repository
+### 1. Clone and install
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/yathrib-04/Evangadi-Forum.git
 cd Evangadi-Forum
+
+cd Backend && npm install
+cd ../frontend && npm install
 ```
 
-### 2. Backend Setup
+### 2. Configure the backend
 
 ```bash
 cd Backend
-npm install
-```
-
-Create `.env` by copying the template:
-
-```bash
 cp .env.example .env
 ```
 
-Then fill it in:
+Fill in your MySQL credentials and a `JWT_SECRET`. See
+[Environment variables](#environment-variables) for the full list.
 
-```env
-PORT=5000
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=your_mysql_username
-DB_PASSWORD=your_mysql_password
-DB_NAME=evangadi_forum
-DATABASE_URL="mysql://your_mysql_username:your_mysql_password@localhost:3306/evangadi_forum"
-JWT_SECRET=your_jwt_secret_key_here
-```
-
-Create database:
+### 3. Create the database and apply migrations
 
 ```sql
-CREATE DATABASE evangadi_forum;
+CREATE DATABASE evangadi_forum
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
-
-Run migrations:
-
-```bash
-npx prisma migrate deploy
-```
-
-#### Note on this machine's MySQL setup
-
-The machine-wide **MySQL80** Windows service requires admin rights to start and
-its root password is unknown, so this project runs its **own** MySQL instance
-using the same `mysqld` binary:
-
-| | |
-|---|---|
-| Data directory | `C:\Users\hp\evangadi-mysql\data` |
-| Port | `3307` (the service, if ever started, keeps `3306`) |
-| User | `root` |
-
-It is a normal process, not a service, so it does **not** restart after a
-reboot. Start it with:
-
-```bash
-npm run db          # from Backend/, leave the window open
-```
-
-The MySQL80 service and its data directory are left completely untouched. If
-you later gain admin access and want to use it instead, start that service and
-point `DB_PORT` / `DATABASE_URL` in `.env` back at `3306`.
-
-### 3. Frontend Setup
-
-```bash
-cd ../frontend
-npm install
-```
-
-## 🏃 Running the Application
-
-### Start Backend
 
 ```bash
 cd Backend
-npm start        # or `npm run dev` for auto-reload via nodemon
+npx prisma migrate deploy
 ```
 
-Backend runs on: `http://localhost:5000`
+<details>
+<summary>If you cannot start the machine-wide MySQL service</summary>
 
-### Start Frontend
+This repository includes `Backend/scripts/start-mysql.ps1`, which runs a
+MySQL instance under your own user account — useful on Windows when the
+`MySQL80` service requires administrator rights. It uses its own data
+directory and port `3307`, so it never collides with a system installation.
 
 ```bash
+cd Backend
+npm run db      # leave this window open
+```
+
+It is an ordinary process, not a service, so it does not restart after a
+reboot. Point `DB_PORT` at `3307` in `.env` when using it.
+
+</details>
+
+---
+
+## Running the app
+
+Two terminals:
+
+```bash
+# Terminal 1 — API on http://localhost:5000
+cd Backend
+npm start          # or: npm run dev   (nodemon, auto-reload)
+```
+
+```bash
+# Terminal 2 — UI on http://localhost:3000
 cd frontend
 npm start
 ```
 
-Frontend runs on: `http://localhost:3000`
+| | |
+|---|---|
+| Application | http://localhost:3000 |
+| API | http://localhost:5000 |
+| Swagger UI | http://localhost:5000/api-docs |
+| Health check | http://localhost:5000/health |
 
-### Access
+### Frontend routes
 
-- **Frontend App**: http://localhost:3000
-- **Swagger Docs**: http://localhost:5000/api-docs
+| Route | Access |
+|---|---|
+| `/login`, `/register`, `/how-it-works` | Public |
+| `/` (question feed) | Authenticated |
+| `/ask-question` | Authenticated |
+| `/question/:questionid` | Authenticated |
 
-## 📄 License
+---
 
-This project is licensed under the ISC License.
+## API reference
+
+All authenticated endpoints expect `Authorization: Bearer <token>`.
+
+### Users
+
+| Method | Endpoint | Auth | Description |
+|---|---|:--:|---|
+| `POST` | `/api/users/register` | — | Create an account |
+| `POST` | `/api/users/login` | — | Exchange credentials for a JWT |
+| `GET` | `/api/users/check` | ✓ | Verify a token, return the caller's identity |
+| `DELETE` | `/api/users/:userid` | ✓ | Delete your **own** account (403 otherwise) |
+
+### Questions
+
+| Method | Endpoint | Auth | Description |
+|---|---|:--:|---|
+| `GET` | `/api/questions` | ✓ | All questions, newest first |
+| `GET` | `/api/questions/:questionid` | ✓ | A single question |
+| `POST` | `/api/questions` | ✓ | Create a question |
+
+### Answers
+
+| Method | Endpoint | Auth | Description |
+|---|---|:--:|---|
+| `GET` | `/api/answers/:questionid` | ✓ | Answers for a question, oldest first |
+| `POST` | `/api/answers` | ✓ | Post an answer |
+
+### System
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/health` | `{"status":"ok"}` — for deployment probes |
+| `GET` | `/api-docs` | Swagger UI |
+
+Questions are identified by a UUID; users and answers by an auto-incrementing
+integer. An empty question list returns `200` with `[]`, not `404`.
+
+---
+
+## Testing
+
+```bash
+# Backend — 57 integration tests
+cd Backend
+npm run test:setup     # creates evangadi_forum_test, applies migrations (once)
+npm test
+
+# Frontend — 30 component tests
+cd frontend
+npm test
+```
+
+Backend tests run against **real MySQL**, not a mocked driver. The controllers
+are raw SQL, so a mock would verify nothing about whether the queries are
+correct. Each test starts from a truncated database, and the suites run
+serially because they share it. Re-run `npm run test:setup` after adding a
+migration.
+
+Coverage includes password hashing and policy enforcement, duplicate accounts,
+forged/expired/malformed tokens, ownership checks on account deletion,
+author attribution derived from the token rather than the request body, and
+SQL injection attempts in path parameters.
+
+---
+
+## Deployment
+
+### Frontend
+
+`REACT_APP_API_URL` is inlined at **build time** — changing it afterwards has
+no effect without a rebuild:
+
+```bash
+cd frontend
+REACT_APP_API_URL=https://your-api.example.com/api npm run build
+```
+
+Routing is handled in the browser, so the host must serve `index.html` for
+every path. Without this, a direct visit or refresh on `/how-it-works`,
+`/login` or `/register` returns 404. Configuration is included for each host:
+
+| Host | File | Notes |
+|---|---|---|
+| Netlify | `frontend/public/_redirects` | Copied into `build/` automatically |
+| Vercel | `frontend/vercel.json` | Set the project root to `frontend/` |
+| nginx / self-hosted | `frontend/nginx.conf.example` | Serve `frontend/build` |
+
+### Backend
+
+The API reads real environment variables; no `.env` file is required in
+production. Deploy the `Backend/` directory, set the variables below, and run:
+
+```bash
+npx prisma migrate deploy
+npm start
+```
+
+The server exits with an explicit message if a required variable is missing or
+the database is unreachable, rather than starting and failing every request.
+Point your platform's health check at `GET /health`.
+
+---
+
+## Environment variables
+
+### Backend (`Backend/.env`)
+
+| Variable | Required | Description |
+|---|:--:|---|
+| `PORT` | | API port (default `5000`) |
+| `DB_HOST` | | MySQL host (default `localhost`) |
+| `DB_PORT` | | MySQL port (default `3306`) |
+| `DB_USER` | ✓ | MySQL user |
+| `DB_PASSWORD` | | MySQL password |
+| `DB_NAME` | ✓ | Database name |
+| `DATABASE_URL` | ✓ | Same connection as a URL, for Prisma Migrate |
+| `JWT_SECRET` | ✓ | Long random string used to sign tokens |
+| `CORS_ORIGIN` | | Allowed frontend origin (default `http://localhost:3000`) |
+| `PUBLIC_API_URL` | | This API's public origin, shown in the Swagger docs |
+
+> `DB_`-prefixed names are deliberate: a bare `USER` variable collides with a
+> shell built-in on Linux and macOS and silently overrides `.env`.
+
+### Frontend (`frontend/.env`)
+
+| Variable | Description |
+|---|---|
+| `REACT_APP_API_URL` | API base URL including `/api`. Inlined at build time. |
+
+Only variables prefixed with `REACT_APP_` are exposed by Create React App.
+
+---
+
+## Known limitations
+
+- **Terms of Service** and **Privacy policy** links are placeholders.
+- No rate limiting on `POST /api/users/login`.
+- The JWT is stored in `localStorage`.
+- Form feedback uses `window.alert` rather than inline validation messages.
+
+---
+
+## License
+
+ISC.
