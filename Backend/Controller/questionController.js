@@ -49,13 +49,7 @@ async function allQuestions(req, res) {
              ORDER BY q.created_at DESC`
         );
 
-        if (rows.length === 0) {
-            return res.status(StatusCodes.NOT_FOUND).json({
-                error: "Not Found",
-                message: "No questions found."
-            });
-        }
-
+        // An empty forum is a valid state, not an error - return an empty list.
         return res.status(StatusCodes.OK).json({ questions: rows });
     } catch (error) {
         console.error(error.message);
